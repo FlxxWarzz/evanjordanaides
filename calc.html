@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<html lang="en">
+<head>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+    .calculator {
+        width: 300px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        grid-template-rows: auto 1fr;
+    }
+    .calculator__display {
+        height: 80px;
+        margin-bottom: 10px; /* Adjusted margin */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        font-size: 24px;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .calculator__buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+    .calculator__buttons button {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 18px;
+        background-color: #f0f0f0;
+        transition: background-color 0.3s ease;
+    }
+    .calculator__buttons button:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="calculator__display" id="display"></div>
+    <div class="calculator__buttons">
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="appendToDisplay('/')">/</button>
+        <button onclick="appendToDisplay('*')">*</button>
+        <button onclick="appendToDisplay('-')">-</button>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('+')">+</button>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('(')">(</button>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay(')')">)</button>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('keydown', function(event) {
+        const key = event.key;
+        if (/\d/.test(key) || ['/', '*', '-', '+', '(', ')', '.', 'Enter'].includes(key)) {
+            event.preventDefault();
+            if (key === 'Enter') {
+                calculate();
+            } else {
+                appendToDisplay(key);
+            }
+        } else if (key === 'Backspace') {
+            event.preventDefault();
+            removeLastCharacter();
+        }
+    });
+
+    function appendToDisplay(value) {
+        const display = document.getElementById('display');
+        if (display.innerText.length < 20) { // Adjust the number of characters allowed
+            display.innerText += value;
+            if (display.scrollWidth > display.clientWidth) {
+                const fontSize = parseFloat(window.getComputedStyle(display).fontSize);
+                display.style.fontSize = (fontSize - 1) + 'px';
+            }
+        }
+    }
+
+    function removeLastCharacter() {
+        const display = document.getElementById('display');
+        const displayText = display.innerText;
+        display.innerText = displayText.slice(0, -1);
+        const fontSize = parseFloat(window.getComputedStyle(display).fontSize);
+        if (displayText.length <= 20 && fontSize < 24) { // Adjust back to normal size if text length is within limit and font size is less than default
+            display.style.fontSize = '24px';
+        }
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').innerText = '';
+        document.getElementById('display').style.fontSize = '24px';
+    }
+
+    function calculate() {
+        try {
+            const result = eval(document.getElementById('display').innerText);
+            document.getElementById('display').innerText = result;
+            if (Math.abs(result - (9 / 11)) < 0.0001) {
+                const newWindow = window.open('about:blank', '_blank');
+                if (newWindow) {
+                    newWindow.document.write('<iframe src="main.html" style="width:100%;height:100%;border:none;"></iframe>');
+                }
+            }
+        } catch (error) {
+            document.getElementById('display').innerText = 'Error';
+        }
+    }
+</script>
+
+</body>
+</html>

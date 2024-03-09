@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Main Page</title>
+<style>
+    .iframe-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .iframe-container iframe {
+        display: none; /* Hide iframes */
+    }
+
+    .fallback-text {
+        display: block; /* Show fallback text */
+    }
+
+    @media screen and (max-width: 768px) {
+        .iframe-container iframe {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="iframe-container">
+    <iframe src="calc.html"></iframe>
+    <iframe src="main.html"></iframe>
+    <p class="fallback-text">Please keep this HTML file in your files to run the program. You don't need to keep it open; just open it once and start the fun!</p>
+</div>
+
+</body>
+</html>
